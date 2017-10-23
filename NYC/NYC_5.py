@@ -9,6 +9,12 @@ import datetime as dt
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import lightgbm as lgb
+import xgboost as xgb
+from sklearn.preprocessing import OneHotEncoder , LabelEncoder
+from sklearn.model_selection import KFold, cross_val_score
+from sklearn import metrics
+
+
 
 #Import data
 train_main = pd.read_csv('train.csv',parse_dates=[2,3],dtype={'id':np.object,'vender_id':np.uint8,'passenger_count':np.uint8,
@@ -33,7 +39,7 @@ test_fr = test_frmain[['id', 'total_distance', 'total_travel_time', 'number_of_s
 test = pd.merge(test_main,test_fr,on='id',how='left')
 print('Number of rows & columns in Test ',test.shape)
 
-del train_fr1 , train_fr2 ,train_frmain,train_fr,test_fr,test_frmain
+del train_fr1 , train_fr2 ,train_frmain,train_fr,test_fr,test_frmain,train_main,test_main
 #weather = pd.read_csv('weather_data_nyc_centralpark_2016.csv')
 #accident = pd.read_csv('accidents_2016.csv')
 
@@ -92,7 +98,7 @@ sns.distplot(train['trip_duration'])
 plt.figure(figsize=(14,5))
 sns.distplot(np.log10(train['trip_duration']))
 
-"""# As trip duration is  then location 
+# As trip duration is  then location 
 #Remove outlier in dataset
 
 def outlier(df,col):
@@ -110,11 +116,12 @@ def outlier(df,col):
     print('Number of outlier data removed',count)
 
 train.columns
-col = ['pickup_longitude', 'pickup_latitude','dropoff_longitude', 'dropoff_latitude',
-       'trip_duration',]
+#col = ['pickup_longitude', 'pickup_latitude','dropoff_longitude', 'dropoff_latitude',
+ #      'trip_duration',]
+col =['trip_duration',]
 outlier(train,col)
 
-train.shape """
+train.shape 
 
 #Determine distance 
 #https://rosettacode.org/wiki/Haversine_formula
@@ -288,26 +295,26 @@ ax[1].set_xlabel('Longitude')
 ax[1].set_ylabel('Latitude')
 
 
-#Lets make cluster
-def cluster(df,k):
-    pickup = ['pickup_longitude','pickup_latitude']
-    dropoff = ['dropoff_longitude','dropoff_latitude']
-    kmeans_pick = KMeans(n_clusters=k,n_init=1)
-    kmeans_pick.fit(df[pickup])
-    cluster_pick = kmeans_pick.labels_
-    df['label_pick'] = cluster_pick.tolist()
-    df['label_drop'] = kmeans_pick.predict(df[dropoff])
-    centroid_pickups = pd.DataFrame(kmeans_pick.cluster_centers_, columns = ['centroid_pick_long', 'centroid_pick_lat'])
-    centroid_dropoff = pd.DataFrame(kmeans_pick.cluster_centers_, columns = ['centroid_drop_long', 'centroid_drop_lat'])
-    centroid_pickups['label_pick'] = centroid_pickups.index
-    centroid_dropoff['label_drop'] = centroid_dropoff.index
+    #Lets make cluster
+    def cluster(df,k):
+        pickup = ['pickup_longitude','pickup_latitude']
+        dropoff = ['dropoff_longitude','dropoff_latitude']
+        kmeans_pick = KMeans(n_clusters=k,n_init=1)
+        kmeans_pick.fit(df[pickup])
+        cluster_pick = kmeans_pick.labels_
+        df['label_pick'] = cluster_pick.tolist()
+        df['label_drop'] = kmeans_pick.predict(df[dropoff])
+        centroid_pickups = pd.DataFrame(kmeans_pick.cluster_centers_, columns = ['centroid_pick_long', 'centroid_pick_lat'])
+        centroid_dropoff = pd.DataFrame(kmeans_pick.cluster_centers_, columns = ['centroid_drop_long', 'centroid_drop_lat'])
+        centroid_pickups['label_pick'] = centroid_pickups.index
+        centroid_dropoff['label_drop'] = centroid_dropoff.index
+        
+        df = pd.merge(df, centroid_pickups, how='left', on=['label_pick'])
+        df = pd.merge(df, centroid_dropoff, how='left', on=['label_drop'])
+        return df
     
-    df = pd.merge(df, centroid_pickups, how='left', on=['label_pick'])
-    df = pd.merge(df, centroid_dropoff, how='left', on=['label_drop'])
-    return df
-
-train = cluster(train,100)
-test = cluster(test,100)
+    train = cluster(train,100)
+    test = cluster(test,100)
 train.head()
 
 #PCA tranformation for ratation 
@@ -335,18 +342,16 @@ init_notebook_mode(connected=True)
 
 
 tc = train.corr()
-plt.figure(figsize=(14,5))
+plt.figure(figsize=(14,10))
 sns.heatmap(tc,annot=True,cmap='coolwarm')
 plt.title("Correlation plot")
 
 #Data preprocesing
-from sklearn.preprocessing import OneHotEncoder , LabelEncoder
 def encode(data):
     le = LabelEncoder()
     data['store_and_fwd_flag'] = le.fit_transform(data['store_and_fwd_flag'])
 encode(train)
 encode(test)
-
 
 # # Feature selection
 train.columns
@@ -356,7 +361,9 @@ Xcol = [ 'vendor_id','passenger_count', 'pickup_longitude', 'pickup_latitude','d
         'pu_month','pu_hour', 'pu_wday','pu_minute','is_weekend','is_satsun','haversine_distances',
         'bearing_angle','label_pick', 'label_drop', 'centroid_pick_long','centroid_pick_lat', 'centroid_drop_long', 'centroid_drop_lat'
        ,'pick_pca0', 'pick_pca1', 'dropoff_pca0', 'dropoff_pca1']
-X_test = test[Xcol]
+X_test = test[Xcol].values
+
+"""
 X_train = train[Xcol]
 y_train = train['trip_duration']
 
@@ -365,7 +372,7 @@ from sklearn.cross_validation import train_test_split
 TX_train,TX_test,Ty_train,Ty_test = train_test_split(X_train,np.log(y_train+1),test_size=0.3,random_state=0)
 Ty_train.head()
 
-"""
+
 # Model building
 from sklearn.linear_model import LinearRegression
 model = LinearRegression()
@@ -402,7 +409,9 @@ y_pred = np.log(rf.predict(Tx_test))-1
 
 print('RMSLE:',rmsle(Ty_test,y_pred))
 
-sns.distplot(y_pred)"""
+sns.distplot(y_pred)
+
+
 
 #Gradient Boosting Regressor
 from sklearn.ensemble import GradientBoostingRegressor
@@ -416,58 +425,38 @@ features.plot(kind='bar')
 y_pred = np.exp(gbm.predict(TX_test))-1
 print('RMSLE for GBM:',rmsle(Ty_test,y_pred))
 
-#pred = np.exp(gbm.predict(X_test))-1
-
-#Xgboost
-import xgboost as xgb
-
-dtrain = xgb.DMatrix(TX_train,label = Ty_train)
-dvalid = xgb.DMatrix(TX_test,label = Ty_test)
-dtest = xgb.DMatrix(test[Xcol])
-watchlist = [(dtrain, 'train'), (dvalid, 'valid')]
-
-xgb_pars = {'min_child_weight': 1, 'eta': 0.3, 'colsample_bytree': 0.7, 
-            'max_depth': 8,
-'subsample': 0.8, 'lambda': 1., 'nthread': -1, 'booster' : 'gbtree', 'silent': 1,
-'eval_metric': 'rmse', 'objective': 'reg:linear'}
-xgb_model = xgb.train(xgb_pars, dtrain, 100, watchlist, early_stopping_rounds=5,
-      maximize=False, verbose_eval=1)
-print('Modeling RMSLE %.5f' % xgb_model.best_score)
-xgb.plot_importance(xgb_model)
-# Submit solution
-#pred = np.exp(model.predict(X_test))-1
-pred = np.exp(xgb_model.predict(dtest,ntree_limit=xgb_model.best_ntree_limit))-1
-submit = pd.DataFrame({'id':test['id'],'trip_duration':pred})
-submit.to_csv('nyc_predict.csv',index=False)
-submit.head()
-
-def runXGB(train_X,train_y,val_x,val_y test_X, eta=0.3,max_depth=5,
-           min_child-weight=1,subsample=0.8,colsample=0.7,ntree_limit=1000,
-           eraly_stoping_rounds=50,)
+#pred = np.exp(gbm.predict(X_test))-1"""
 
 #Light GBM
 def  runLGB(train_X,train_y, val_X,val_y, test_X, eta =0.05, max_depth =5, 
             min_child_weight=1, subsample=0.8, colsample=0.7, num_rounds=8000, 
-            early_stopping_rounds = 50, seeds_val=2017):
-    params = {'objective':'regression', 'metric':'l2_root','learning_rate':eta,
-              'min_child_weight':min_child_weight,'bagging_fraction':subsample,
-              'bagging_seed':seeds_val,'feature_fraction':colsample,'verbosity':0,
-              'max_depth':max_depth,'nthread':-1}   
+            early_stopping_rounds = 100, seeds_val=2017):
+    
+    params = {'objective':'regression', 
+              'metric':'l2_root',
+              'learning_rate':eta,
+              'min_child_weight':min_child_weight,
+              'bagging_fraction':subsample,
+              'bagging_seed':seeds_val,
+              'feature_fraction':colsample,
+              'verbosity':0,              
+              'max_depth':max_depth,
+              #'reg_lambda':2
+              'nthread':-1} 
     lgtrain = lgb.Dataset(train_X,label= train_y)
     lgval =lgb.Dataset(val_X,label=val_y)
-    model = lgb.train(params, lgtrain, num_rounds, valid_sets=lgval, 
-                      early_stopping_rounds=early_stopping_rounds,verbose_eval=20)
+    model = lgb.train(params, lgtrain, num_rounds, valid_sets=lgval,
+                      early_stopping_rounds=early_stopping_rounds, 
+                      verbose_eval=20)
     pred_val = model.predict(val_X,num_iteration=model.best_iteration)
     pred_test = model.predict(test_X,num_iteration=model.best_iteration)
     return pred_val,pred_test,model
 
 #K fold validation
-from sklearn.model_selection import KFold, cross_val_score
-from sklearn import metrics
 X = train[Xcol].values
 y = np.log(train['trip_duration'].values+1)
 
-kf =KFold(n_splits=10, random_state=10,shuffle=True)
+kf =KFold(n_splits=5, random_state=5,shuffle=True)
 cv_scores = []
 pred_test_full =0
 pred_val_full = np.zeros(train.shape[0])
@@ -476,16 +465,16 @@ for train_index ,test_index in kf.split(X):
     print('TRAIN:',train_index,'TEST:',test_index)
     TX_train,TX_test = X[train_index],X[test_index]
     Ty_train,Ty_test = y[train_index],y[test_index]
-    pred_val,pred_test, model = runLGB(TX_train,Ty_train,TX_test,Ty_test,X_test,eta=0.3,
-                                       num_rounds=2000,max_depth=8)
+    pred_val,pred_test, model = runLGB(TX_train,Ty_train,TX_test,Ty_test,X_test,eta=0.1,
+                                       num_rounds=10000,max_depth=8)
     pred_val_full[test_index] = pred_val
     pred_test_full +=pred_test
     cv_scores.append(np.sqrt(metrics.mean_squared_error(Ty_test, pred_val)))
 
 print(cv_scores)
 print('Mean cv score:',np.mean(cv_scores))
-
-pred_test_full = pred_test_full/10
+lgb.plot_importance(model)
+pred_test_full = pred_test_full/5
 pred_lgb = np.exp(pred_test_full)-1
 submit = pd.DataFrame({'id':test['id'],'trip_duration':pred_lgb})
 submit.to_csv('nyc_predict.csv',index=False)
@@ -495,4 +484,108 @@ def rmsle(y_train,y_pred):
     return np.sqrt(np.mean((np.log(y_train+1)-np.log(y_pred+1))**2))
 
 
+#Xgboost
 
+
+def runXGB(train_X,train_y,val_x,val_y, test_X, num_rounds=1000, eta=0.3,max_depth=5,
+           min_child_weight=1,subsample=0.8,colsample=0.7,
+           early_stopping_rounds=50,seeds_val=2017):
+    
+    params = {'objective':'reg:linear',
+              'booster':'gbtree',
+              'eta':eta,
+              'subsample':subsample,
+              'colsamaple_bytree':colsample,
+              'max_depth':max_depth,
+              'min_child_weight':min_child_weight,
+              'eval_metric':'rmse',
+              #'early_stoping_rounds':early_stoping_rounds,
+              'seeds':seeds_val,
+              #verbose_eval=20
+              'silent':1,
+              'lambda':2,
+              'nthread':-1 }
+    pslt = list(params.items())
+    xgtrain = xgb.DMatrix(train_X,label=train_y)
+    xgvalid = xgb.DMatrix(val_x,label=val_y)
+    xgtest = xgb.DMatrix(test_X)
+    watchlist = [(xgtrain,'train'),(xgvalid,'test')]
+    model = xgb.train(pslt,xgtrain, num_rounds,watchlist,verbose_eval=10,early_stopping_rounds=early_stopping_rounds)
+    pred_val = model.predict(xgvalid,ntree_limit=model.best_ntree_limit)
+    pred_test = model.predict(xgtest,ntree_limit=model.best_ntree_limit)
+    
+    return pred_val, pred_test
+
+# K flod and model
+kf1 = KFold(n_splits=5,shuffle=True,random_state=2017)
+
+cv_scores1 = []                                                                                                                                                                                                 
+pred_test_full1 = 0
+pred_val_full1 = np.zeros(train.shape[0])
+
+for train_index1,test_index1 in kf1.split(X):
+    train_X1, train_y1 = X[train_index1], y[train_index1]
+    val_X1 , val_y1 = X[test_index1],y[test_index1]
+    pred_val1,pred_test1 = runXGB(train_X1,train_y1,val_X1,val_y1,test[Xcol],
+                                         num_rounds=50,eta=0.3,max_depth=5)
+    pred_val_full1[test_index1] = pred_val1
+    pred_test_full1 +=pred_test1
+    cv_scores1.append(np.sqrt(metrics.mean_squared_error(val_y1,pred_val1)))
+
+print(cv_scores1)
+print('Mean cv score :',np.mean(cv_scores1))
+
+pred_test_full1 = pred_test_full1/5
+pred_xgb = np.exp(pred_test_full1)-1
+
+submit1 = pd.DataFrame({'id':test['id'],'trip_duration':pred_xgb})
+submit1.to_csv('nyc_predict1.csv',index=False)
+
+submit1.head()
+
+#XGBOOST
+pred_val1,pred_test1 = runXGB(TX_train,Ty_train,TX_test,Ty_test,test[Xcol],
+                                         num_rounds=50,eta=0.3,max_depth=8)
+
+pred_xgb = np.exp(pred_test1)-1    
+
+
+#Ensemble
+ensemble = pred_xgb*0.4+pred_lgb*0.6
+submit1 = pd.DataFrame({'id':test['id'],'trip_duration':ensemble})
+submit1.to_csv('nyc_predict1.csv',index=False)
+
+submit1.head()
+
+#Grid SEARCH
+from sklearn.grid_search import GridSearchCV
+
+cv_params = {'max_depth':[5,7,9],'min_child_weight':[1,3,5]}
+ind_params = {'learning_rate':0.3,'n_estimators':100,'seed':0,'subsample':0.8,
+              'colsample_bytree':0.8,'objective':'reg:linear'}
+model = lgb.LGBMRegressor(colsample_bytree=1, learning_rate=0.1,
+       max_bin=255, max_depth=1, min_child_samples=10, min_child_weight=5,
+       min_split_gain=0, n_estimators=100, nthread=-1,
+       objective='reg:linear', reg_alpha=0, reg_lambda=0, seed=10,
+       silent=True, subsample=1 )
+gdsearch = GridSearchCV(model,cv_params,
+                             scoring='roc_auc',cv=5,n_jobs=1,verbose=1)
+gdsearch.fit(TX_train,Ty_train)
+
+optimized_GBM.grid_scores_
+
+#2 trail
+cv_params = {'learnig_rate':[0.3,0.1,0.01],'subsample':[0.7,0.8,0.9]}
+ind_params = {'n_estimator':1000,} 
+
+import ...
+
+if __name__=='__main__':
+    cv_params = {'max_depth':[5,7,9],'min_child_weight':[1,3,5]}
+    ind_params = {'learning_rate':0.3,'n_estimators':10,'seed':0,'subsample':0.8,
+              'colsample_bytree':0.8,'objective':'reg:linear'}
+    optimized_GBM = GridSearchCV(lgb.LGBMRegressor(objective='reg:linear',learning_rate=0.1),cv_params,
+                             scoring='accuracy',cv=5,n_jobs=1,verbose=1)
+    optimized_GBM.fit(X,y)
+
+    
