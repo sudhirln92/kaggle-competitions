@@ -236,7 +236,7 @@ for train_index,test_index in kf.split(X,y):
     xtr,xvl = X.loc[train_index], X.loc[test_index]
     ytr,yvl = y.loc[train_index], y.loc[test_index]
     
-    pred_test,model = XGB(xtr,xvl,y+tr,yvl,x_test,eta=0.02,num_rounds=500,max_depth=10)
+    pred_test,model = XGB(xtr,xvl,ytr,yvl,x_test,eta=0.02,num_rounds=500,max_depth=10)
     pred_test_full +=pred_test
 
 xgb.plot_importance(booster=model)
