@@ -8,13 +8,17 @@ Created on Tue Jul 18 00:24:17 2017
 """
 #NLP
 
-#Importing dataset
+# =============================================================================
+# #Importing dataset
+# =============================================================================
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#Importing Dataset
+# =============================================================================
+# #Importing Dataset
+# =============================================================================
 #import os
 #os.chdir('D:\Py-R\cancer')
 train = pd.read_csv('training_variants')
@@ -31,7 +35,9 @@ test = pd.merge(test, testx, how = 'left', on = 'ID').fillna('')
 train.Gene.unique()
 train.Variation.unique()
 
-#Data Exploration
+# =============================================================================
+# #Data Exploration
+# =============================================================================
 cnt_srs = trainx['Text'].sum()
 
 train['Gene'].unique()
@@ -41,7 +47,9 @@ plt.figure(figsize=(12,6))
 sns.barplot(cnt_srs.index, cnt_srs.values, alpha=0.8)
 plt.show()
 
-#cleaning of data
+# =============================================================================
+# #cleaning of data
+# =============================================================================
 trainx.head()
 import re
 import nltk
@@ -56,7 +64,10 @@ for i in range(0,3321):
     review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
     review = ' '.join(review)
     corpus1.append(review)
-    
+ 
+# =============================================================================
+# TF-IDF
+# =============================================================================
 from sklearn.feature_extraction.text import TfidfVectorizer
 tfidf = TfidfVectorizer(
 	min_df=1, max_features=1600, strip_accents='unicode',lowercase =True,
@@ -69,26 +80,34 @@ print(X_train)
 
 X_test = tfidf.transform(testx['Text']).toarray()
 
-# Feature Scaling
+# =============================================================================
+# # Feature Scaling
+# =============================================================================
 from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 y_train = train['Class']
 
-#Converting to categorical variable
+# =============================================================================
+# #Converting to categorical variable
+# =============================================================================
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 le = LabelEncoder()
 y_train=le.fit_transform(y_train)
 #onh = OneHotEncoder(categorical_features = [0])
 #y_train =onh.fit_transform(y_train).toarray()
 
-# Preparing model
+# =============================================================================
+# # Preparing model
+# =============================================================================
 from sklearn.ensemble import RandomForestClassifier
 classifier = RandomForestClassifier(n_estimators=5000)
 classifier.fit(X_train,y_train)
 
-#Predict
+# =============================================================================
+# #Predict
+# =============================================================================
 y_pred=classifier.predict_proba(X_test)
 y=pd.DataFrame(y_pred)
 #np.mean(y_pred==y_train)

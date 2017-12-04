@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct  2 11:08:19 2017
+Created on Tue Jul 18 00:24:17 2017
 
 @author: sudhir
 """
@@ -29,16 +29,15 @@ from sklearn.naive_bayes import GaussianNB,MultinomialNB
 from sklearn.ensemble import RandomForestClassifier
 import lightgbm as lgb
 
-
 # =============================================================================
-# #Importing Dataset
+# Read data set
 # =============================================================================
-train = pd.read_csv('training_variants')
-test = pd.read_csv('stage2_test_variants.csv')
+train = pd.read_csv('../input/training_variants')
+test = pd.read_csv('../input/stage2_test_variants.csv')
 
-trainx = pd.read_csv('training_text',sep = '\|\|', engine= 'python', header=None, 
+trainx = pd.read_csv('../input/training_text',sep = '\|\|', engine= 'python', header=None, 
                      skiprows=1, names=["ID","Text"])
-testx = pd.read_csv('stage2_test_text.csv',sep = '\|\|', engine= 'python', header=None, 
+testx = pd.read_csv('../input/stage2_test_text.csv',sep = '\|\|', engine= 'python', header=None, 
                      skiprows=1, names=["ID","Text"])
 
 train = pd.merge(train, trainx, how = 'left', on = 'ID').fillna('')
@@ -116,11 +115,6 @@ def textlen(train):
 train['Text_no_word'], train['Text_no_char'] = textlen(train)
 test['Text_no_word'], test['Text_no_char'] = textlen(test)
 
-sns.distplot(train['Text_no_word'],bins=120)
-sns.distplot(train['Text_no_char'],bins=120)
-
-train = train[train['Text_no_char']>1000]
-
 # =============================================================================
 # # Bag of word
 # =============================================================================
@@ -151,15 +145,6 @@ X_train = pd.DataFrame(X_train)
 X_train = X_train.join(train[['Gene', 'Variation', 'Text_no_word','Text_no_char']]) 
 X_test = pd.DataFrame(X_test)
 X_test = X_test.join(test[['Gene', 'Variation', 'Text_no_word','Text_no_char']])
-""""
-a= pd.get_dummies(X_train['Gene'])
-a.columns = np.linspace(.1,1.1,264)
-X_train= X_train.join(a)
-
-a= pd.get_dummies(X_test['Gene'])
-a.columns = np.linspace(.1,1.1,279)
-l = X_test.join(a)
-X_test = l.iloc[:,0:k.shape[1]]"""
 
 # =============================================================================
 # # Feature Scaling
@@ -177,30 +162,31 @@ xtr,xvl,ytr,yvl = train_test_split(X_train,y_train,test_size=0.3,random_state=10
 # =============================================================================
 # #Modeling
 # #Naive clf
-# nbc = GaussianNB()
 # =============================================================================
-mnb = MultinomialNB()
+nbc = GaussianNB()
+#mnb = MultinomialNB()
 nbc.fit(xtr,ytr)
-mnb.fit(xtr,ytr)
+#mnb.fit(xtr,ytr)
 y_nbcP = nbc.predict(xvl)
 
 y_nbc = nbc.predict_proba(X_test)
-y_mnb = mnb.predict_proba(X_test)
-confusion_matrix(yvl,nbc.predict(xvl))
+#y_mnb = mnb.predict_proba(X_test)
+print(confusion_matrix(yvl,nbc.predict(xvl)))
 
 # =============================================================================
 # # Random forest classifier
 # =============================================================================
+"""
 rfc = RandomForestClassifier(n_estimators=50,max_depth=8,min_samples_split=4)
 rfc.fit(xtr,ytr)
 confusion_matrix(yvl,rfc.predict(xvl))
 
-y_rfc=rfc.predict_proba(X_test)
-
+y_rfc=rfc.predict_proba(X_test) """
 
 # =============================================================================
 # #Light gbm 
 # =============================================================================
+
 def runLgb(Xtr,Xvl,ytr,yvl,test,num_rounds=10,max_depth=10,eta=0.5,subsample=0.8,
            colsample=0.8,min_child_weight=1,early_stopping_rounds=50,seeds_val=2017):
     
@@ -239,17 +225,16 @@ pred_test_full=0
 for train_index,test_index in kf.split(X_train):
     Xtr,Xvl = X_train[train_index],X_train[test_index]
     ytr,yvl = y_train[train_index],y_train[test_index]
-    pred_test,pred_val,model = runLgb(xtr,xvl,ytr,yvl,X_test,num_rounds=1000,max_depth=5,eta=0.03)
+    
+    pred_test,pred_val,model = runLgb(Xtr,Xvl,ytr,yvl,X_test,num_rounds=10,max_depth=3,
+                            eta=0.02,)
     pred_test_full +=pred_test
     #cv_score.append(np.sqrt(mean_squared_error(yvl,pred_val)))
-
 pred_test = pred_test_full/10
-
 # =============================================================================
 # #Result submission
 # =============================================================================
 submit = pd.DataFrame(test.ID)
 submit = submit.join(pd.DataFrame(pred_test))
 submit.columns = ['ID', 'class1','class2','class3','class4','class5','class6','class7','class8','class9']
-
-submit.to_csv('submission.csv', index=False) 
+submit.to_csv('submission.csv', index=False)

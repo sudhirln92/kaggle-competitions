@@ -7,13 +7,17 @@ Created on Tue Jul 18 00:24:17 2017
 """
 #NLP
 
-#Importing dataset
+# =============================================================================
+# #Importing dataset
+# =============================================================================
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#Importing Dataset
+# =============================================================================
+# #Importing Dataset
+# =============================================================================
 import os
 os.chdir('D:\Py-R\cancer')
 train = pd.read_csv('training_variants')
@@ -30,7 +34,9 @@ test = pd.merge(test, testx, how = 'left', on = 'ID').fillna('')
 train.Gene.unique().value_counts()
 train.Variation.unique().value_counts()
 
-#Data Exploration
+# =============================================================================
+# #Data Exploration
+# =============================================================================
 cnt_srs = trainx['Text'].value_counts()
 
 train['Gene'].unique()
@@ -40,7 +46,9 @@ plt.figure(figsize=(12,6))
 sns.barplot(cnt_srs.index, cnt_srs.values, alpha=0.8)
 plt.show()
 
-#cleaning of data
+# =============================================================================
+# #cleaning of data
+# =============================================================================
 trainx.head()
 #nltk.download() 
 
@@ -56,7 +64,9 @@ print(X_train)
 
 X_test = tfidf.transform(testx['Text']).toarray()
 
-# Feature Scaling
+# =============================================================================
+# # Feature Scaling
+# =============================================================================
 from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
@@ -64,7 +74,9 @@ X_test = sc.transform(X_test)
 y_train = train['Class']
 
 
-# Preparing model
+# =============================================================================
+# # Preparing model
+# =============================================================================
 from sklearn.ensemble import RandomForestClassifier
 classifier = RandomForestClassifier(n_estimators=5000)
 classifier.fit(X_train,y_train)
@@ -73,7 +85,9 @@ classifier.fit(X_train,y_train)
 y_pred=classifier.predict(X_test)
 
 #np.mean(y_pred==y_train)
-#Converting to categorical variable
+# =============================================================================
+# #Converting to categorical variable
+# =============================================================================
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 le = LabelEncoder()
 y_pred=le.fit_transform(y_pred)

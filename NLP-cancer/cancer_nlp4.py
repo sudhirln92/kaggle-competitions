@@ -8,7 +8,9 @@ Created on Tue Jul 18 00:24:17 2017
 """
 #NLP
 
-#Importing library
+# =============================================================================
+# #Importing library
+# =============================================================================
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,7 +29,10 @@ from sklearn.model_selection import KFold, cross_val_score
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 import lightgbm as lgb
-#Importing Dataset
+
+# =============================================================================
+# #Importing Dataset
+# =============================================================================
 #import os
 #os.chdir('D:\Py-R\cancer')
 train = pd.read_csv('training_variants')
@@ -41,7 +46,9 @@ testx = pd.read_csv('stage2_test_text.csv',sep = '\|\|', engine= 'python', heade
 train = pd.merge(train, trainx, how = 'left', on = 'ID').fillna('')
 test = pd.merge(test, testx, how = 'left', on = 'ID').fillna('')
 
-#Data Exploration
+# =============================================================================
+# #Data Exploration
+# =============================================================================
 #cnt_srs = trainx['Text'].sum()
 train.Gene.nunique()
 train['Gene'].unique()
@@ -70,7 +77,9 @@ k = train.groupby('Variation')['Variation'].count()
 plt.figure(figsize=(12,6))
 sns.distplot(k)
 
-#cleaning of data
+# =============================================================================
+# #cleaning of data
+# =============================================================================
 def cleantext(train,):
     corpus = []
     for i in range(0,train.shape[0]):
@@ -93,7 +102,9 @@ corp_test = pd.read_csv('corp_testS2.csv')
 #corp_train.to_csv('corp_train.csv',index=False)
 #corp_test.to_csv('corp_test.csv',index=False)
 
-# Determine lenght of text
+# =============================================================================
+# # Determine lenght of text
+# =============================================================================
 def textlen(train):
     k = train['Text'].apply(lambda x: len(str(x).split()))
     l = train['Text'].apply(lambda x: len(str(x)))
@@ -108,7 +119,9 @@ for i in range(10):
     stopcheck = Counter(corp_train[i].split())
     print(stopcheck.most_common()[:10])
 
-# Bag of word
+# =============================================================================
+# # Bag of word
+# =============================================================================
 tfidf = TfidfVectorizer(
 	min_df=1, max_features=1600, strip_accents='unicode',lowercase =False,
 	analyzer='word', token_pattern=r'\w+', ngram_range=(1, 3), use_idf=True, 
@@ -126,7 +139,10 @@ cve = CountVectorizer(analyzer="word", tokenizer=nltk.word_tokenize,
     preprocessor=None, stop_words='english', max_features=None)  
 X=cve.fit_transform(train1['Text']).toarray()
 test1 = cve.fit_transform(corp_test).toarray()
-#Converting to categorical variable
+
+# =============================================================================
+# #Converting to categorical variable
+# =============================================================================
 def encoding(df,col):
     le = LabelEncoder()
     for i in col:
@@ -145,24 +161,32 @@ X_test = pd.DataFrame(X_test)
 X_test = X_test.join(test[['Gene', 'Variation', 'Text_no_word','Text_no_char']])
 #a= pd.get_dummies(X_train['Gene'])
 
-# Feature Scaling
+# =============================================================================
+# # Feature Scaling
+# =============================================================================
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 y_train = train['Class']
 
-#Modeling
-#Naive clf
+# =============================================================================
+# #Modeling
+# #Naive clf
+# =============================================================================
 nbc = GaussianNB()
 nbc.fit(X_train,y_train)
 y_nbc = nbc.predict_proba(X_test)
 
-# Random forest classifier
+# =============================================================================
+# # Random forest classifier
+# =============================================================================
 rfc = RandomForestClassifier(n_estimators=5000,max_depth=8,min_samples_split=4)
 rfc.fit(X_train,y_train)
 y_rfc=rfc.predict_proba(X_test)
 
-#Light gbm 
+# =============================================================================
+# #Light gbm 
+# =============================================================================
 
 def runLgb(Xtr,Xvl,ytr,yvl,test,num_rounds=10,max_depth=10,eta=0.5,subsample=0.8,
            colsample=0.8,min_child_weight=1,early_stopping_rounds=50,seeds_val=2017):
@@ -186,7 +210,9 @@ def runLgb(Xtr,Xvl,ytr,yvl,test,num_rounds=10,max_depth=10,eta=0.5,subsample=0.8
     pred_test = model.predict_proba(test,num_iteration=model.best_iteration)
     return pred_test,pred_val,model
 
-#k-fold corss validate model
+# =============================================================================
+# #k-fold corss validate model
+# =============================================================================
 kf = KFold(n_splits=10,random_state=111,shuffle=True)
 cv_score = []
 pred_test_full=0
@@ -200,7 +226,9 @@ for train_index,test_index in kf.split(X_train):
     pred_test_full +=pred_test
     cv_score.append(np.sqrt(mean_squared_error(yvl,pred_val)))
 
-#Predict
+# =============================================================================
+# #Predict
+# =============================================================================
 y=pd.DataFrame(y_rfc)
 #np.mean(y_pred==y_train)
 

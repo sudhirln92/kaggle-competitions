@@ -7,13 +7,17 @@ Created on Tue Jul 18 00:24:17 2017
 """
 #NLP
 
-#Importing dataset
+# =============================================================================
+# #Importing dataset
+# =============================================================================
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#Importing Dataset
+# =============================================================================
+# #Importing Dataset
+# =============================================================================
 import os
 os.chdir('/home/sudhir/R/cancer')
 train = pd.read_csv('training_variants')
@@ -30,7 +34,9 @@ test = pd.merge(test, testx, how = 'left', on = 'ID').fillna('')
 train.Gene.unique().shape
 train.Variation.unique().shape
 
-#Data Exploration
+# =============================================================================
+# #Data Exploration
+# =============================================================================
 cnt_srs = trainx['Text'].value_counts()
 
 train['Gene'].unique()
@@ -40,7 +46,9 @@ plt.figure(figsize=(12,6))
 sns.barplot(cnt_srs.index, cnt_srs.values, alpha=0.8)
 plt.show()
 
-#cleaning of data
+# =============================================================================
+# #cleaning of data
+# =============================================================================
 trainx.head()
 import re
 import nltk
@@ -66,6 +74,9 @@ from nltk.stem.porter import PorterStemmer
     review = ' '.join(review)
     corpus1.append(review)
 
+# =============================================================================
+# TF IDF
+# =============================================================================
 from sklearn.feature_extraction.text import TfidfVectorizer
 tfidf = TfidfVectorizer(
 	min_df=1, max_features=1600, strip_accents='unicode',lowercase =True,
@@ -76,7 +87,9 @@ tfidf = TfidfVectorizer(
 X_train = tfidf.transform(trainx['Text']).toarray()
 print(X_train)
 
-#Creating Bag of words
+# =============================================================================
+# #Creating Bag of words
+# =============================================================================
 from sklearn.feature_extraction.text import CountVectorizer
 cv = CountVectorizer(max_features = 5000)
 X = cv.fit_transform(corpus).toarray()
@@ -93,11 +106,15 @@ from sklearn.feature_extraction import DictVectorizer
 vec = DictVectorizer()
 vec.fit_transform(measurements).toarray()
 
-#Splitting the dataset into the Training set and Test set
+# =============================================================================
+# #Splitting the dataset into the Training set and Test set
+# =============================================================================
 from sklearn.cross_validation import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size= 0.25)
 
-# Feature Scaling
+# =============================================================================
+# # Feature Scaling
+# =============================================================================
 from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
