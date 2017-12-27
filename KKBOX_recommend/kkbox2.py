@@ -86,22 +86,12 @@ plt.figure(figsize=(12,10))
 sns.distplot(k[k>1000])
 plt.xlabel('')
 
-
-df_train['source_system_tab'].nunique()
-df_train['source_screen_name'].nunique()
-df_train['source_type'].nunique()
-df_train['target'].nunique()
-df_train['city'].nunique()
-df_train['bd'].nunique()
-df_train['gender'].nunique()
-df_train['registered_via'].nunique()
-df_train['genre_ids'].nunique()
-df_train['artist_name'].nunique()
-df_train['composer'].nunique()
-df_train['lyricist'].nunique()
-df_train['language'].nunique()
-sns.countplot(df_train['language'])
-plt.yscale('log')
+def uniq(df):
+    col = df.columns
+    for i in col:
+        print('\n Unique value of "{}" is "{}" '.format(i,df[i].nunique()))
+        #print(df[i].unique())
+uniq(df_train)
 
 # Date time feature
 def date_feature(df):
@@ -135,33 +125,56 @@ label(df_test,cat)
 
 df_train.head(2).T
 
-#split data set 
+#Split data set 
 X = df_train.drop(['target','registration_init_time', 'expiration_date'],axis=1)
 y = df_train['target']
 x_test = df_test.drop(['id','registration_init_time', 'expiration_date'],axis=1)
 
-xtr,xvl,ytr,yvl = train_test_split(X,y,test_size=0.3,random_state=None)
-del X, y
 
-#Model
-lr = LogisticRegression(max_iter=100,random_state=seed)
-lr.fit(xtr,ytr)
-pred = lr.predict(xvl)
+# Light GBM model
+def runLGB(train,valid,y_train,y_valid,test,eta=0.5,num_rounds=10,early_stopping_rounds=20,sample=0.8,
+           col_sample=0.7,max_depth=7):
+    
+    param = {
+            'objective':'binary',
+            'boosting':'gbdt',
+            'learning_rate':eta,
+            'metric':'binary_logloss',
+            #'metric':'auc',
+            'bagging_fraction':sample,
+            'bagging_freq':5,
+            'bagging_seed':seed,
+            'num_leaves':100,
+            'feature_fraction':col_sample,
+            'verbose':10,            
+            'min_child_weight':1,
+            'max_depth':max_depth,
+            'nthread':-1           
+            }
+   
+    lgtrain = lgb.Dataset(train,label=y_train)
+    lgvalid = lgb.Dataset(valid,label=y_valid)
+    
+    model=lgb.train(param,lgtrain,num_rounds,valid_sets=lgvalid,
+              early_stopping_rounds=early_stopping_rounds)
+    #lg_pred = model.predict(xvl,num_iteration=model.best_iteration)
+    pred = model.predict(test,num_iteration=model.best_iteration)
+    
+    return pred,model
 
-# accuracy
-confusion_matrix(yvl,pred)
+#Kfold
+kf = KFold(n_splits =3,random_state=seed,shuffle=True)
+pred_test_full=0
+for train_index,test_index in kf.split(df_train):
+    xtr,xvl = X.loc[train_index], X.loc[test_index]
+    ytr,yvl = y.loc[train_index], y.loc[test_index]
+    
+    pred_test,model = runLGB(xtr,xvl,ytr,yvl,x_test,eta=0.1,num_rounds=1000,max_depth=10)
+    pred_test_full +=pred_test
 
-#Rf
-rf = RandomForestClassifier(max_depth=7,n_estimators=200,)
-rf.fit(xtr,ytr)
-rf_pred = rf.predict(xvl)
-print(rf.feature_importances_)
-rf.score(xvl,yvl)
-
-#Accuracy
-confusion_matrix(yvl,rf_pred)
+#p=model.feature_importances
 
 #Submission result
-y_pred = rf.predict(x_test)
+y_pred = pred_test_full/3
 submit = pd.DataFrame({'id':df_test['id'],'target':y_pred})
 submit.to_csv('kk_target.csv',index=False)
