@@ -18,7 +18,7 @@ Encoding Data: label encoding, One hot encoding, Frequency encoding, Mean and me
 Logistic regression, Light GBM, Xgboost,Catboost
 Ensemble modeling is performed, base model is 2 Lightgbm and next level stack is catboost
 
-#Model evaluation  
+# Model evaluation  
 The evaluation metric for this competition is Log Loss.
 The model is cross validate using Stratified KFold algorithm.
 
