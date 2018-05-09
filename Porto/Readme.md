@@ -1,5 +1,3 @@
-# Porto Seguro’s Safe Driver Prediction					Monday 04 December 2017 03:58:30 PM IST
-
 # Porto Seguro Safe Driver Prediction 
 https://www.kaggle.com/c/porto-seguro-safe-driver-prediction
 	Porto Sergo Is Largest Auto And Homeowner Insurance Company. The aim of the project is to predict probability that a driver will intiate an auto insurance claim next yesr. A more accurate prediction will allow them to further tailor their prices, and hopefully make auto insurance coverage more accessible to more driver. 
@@ -60,14 +58,15 @@ param = {
             'reg_alpha':1.5, 
             'reg_lambda':5,
             'scale_pos_weight':9
-        
             #'nthread':-1           
             }
 
  Logistic Regression        
 class_weight='balanced',C=0.003
 
-![Flow Chart](/folwchart1-1.jpg)
+
+## Flow Chart
+<img src='folwchart1-1.jpg' alt='Flowchart'>
 
 
 # Out come of project:
