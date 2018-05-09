@@ -24,7 +24,8 @@ The model is evaluated on Gini coefficient, a popular measure in insurance indus
 
 ## Parameter 
  XgBoost
-"""params = {
+"""
+params = {
         'objective':'binary:logistic',        
         'max_depth':max_depth,
         'learning_rate':eta,
@@ -38,10 +39,12 @@ The model is evaluated on Gini coefficient, a popular measure in insurance indus
         'gamma':10,
         'scale_pos_weight':1.6
         #'n_thread':-1
-    }"""
+    }
+"""
 
  LightGBM
-"""param = {
+"""
+param = {
             'objective':'binary',
             'boosting':'gbdt',
             'learning_rate':eta,            
@@ -58,15 +61,18 @@ The model is evaluated on Gini coefficient, a popular measure in insurance indus
             'reg_lambda':5,
             'scale_pos_weight':9
             #'nthread':-1           
-            }"""
+   	 }
+"""
 
  Logistic Regression
-"""class_weight='balanced',C=0.003 """
+"""
+class_weight='balanced',C=0.003 
+"""
 
 
 ## Flow Chart
-![Flow Chart](/Flowchart1-1.jpg)
-<img src='Flowchart1-1.jpg' alt='Flowchart'>
+![Flow Chart](/Flowchart-1.jpg)
+<img src='Flowchart-1.jpg' alt='Flowchart'>
 
 
 ## Out come of project:
