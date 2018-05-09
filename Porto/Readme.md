@@ -66,7 +66,7 @@ class_weight='balanced',C=0.003
 
 
 ## Flow Chart
-<img src='folwchart1-1.jpg' alt='Flowchart'>
+<img src='Flowchart1-1.jpg' alt='Flowchart'>
 
 
 # Out come of project:
