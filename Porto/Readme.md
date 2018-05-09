@@ -17,15 +17,14 @@ The hyperparameter for machine learning algorithom is tuned using grid search me
 
 ## Model validation
 The model is evaluated on Gini coefficient, a popular measure in insurance industry which quantifies how well-ranked predicted probabilitie are relative to actual class labels. We are familiar with ROC AUC metric, it turns out simple relationship of gini is 2 * AUC -1 with ROC AUC  . The model is 5 times cross validated using Straigfied Kfold validation strategy, the average of predicted target variable is submitted. For logistic regression confusion matrix, ROC plot is used to evaluate model performance.
- 
 
 ## Public Kernel
 [Logistic Regression](https://www.kaggle.com/sudhirnl7/simple-logistic-model-porto)
 [XgBoost](https://www.kaggle.com/sudhirnl7/xgboost-with-stratifiedkflod-lb-0-282)
 
 ## Parameter 
- XgBoost
-"""
+ **XgBoost**
+```
 params = {
         'objective':'binary:logistic',        
         'max_depth':max_depth,
@@ -41,10 +40,10 @@ params = {
         'scale_pos_weight':1.6
         #'n_thread':-1
     }
-"""
+```
 
- LightGBM
-"""
+ **LightGBM**
+```
 param = {
             'objective':'binary',
             'boosting':'gbdt',
@@ -63,18 +62,15 @@ param = {
             'scale_pos_weight':9
             #'nthread':-1           
    	 }
-"""
+```
 
- Logistic Regression
-"""
+ **Logistic Regression**
+```
 class_weight='balanced',C=0.003 
-"""
-
+```
 
 ## Flow Chart
 ![Flow Chart](/Porto/Flowchart-1.jpg)
-<img src='Flowchart-1.jpg' alt='Flowchart'>
-
 
 ## Out come of project:
 This project give good opportunity to explore data set. Create new feature from data  set. I have submitted prediction more than 70 to kaggle wesite. My best gini score 0.282 on public LB and 0.287 on private LB. Overall my standing at end of competition is top 39%. 
