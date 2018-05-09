@@ -67,7 +67,7 @@ param = {
  Logistic Regression        
 class_weight='balanced',C=0.003
 
-![Flow Chart](folwchart1-1.jpg)
+![Flow Chart](/folwchart1-1.jpg)
 
 
 # Out come of project:
