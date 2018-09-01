@@ -68,7 +68,7 @@ class_weight='balanced',C=0.003
 ```
 
 ## Flow Chart
-![Flow Chart](/Porto/Flowchart-1.jpg)
+![Flow Chart](Flowchart-1.jpg)
 
 ## Out come of project:
 This project give good opportunity to explore data set. Create new feature from data  set. I have submitted prediction more than 70 to kaggle wesite. My best gini score 0.282 on public LB and 0.287 on private LB. Overall my standing at end of competition is top 39%. 
