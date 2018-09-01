@@ -17,7 +17,7 @@ The task for this competition is to predict two target properties:
 ## Evaluvation metrics
 The root mean square log error (RMSLE) is used as evaluvation metric to analyze performance of model. 
 
-RMSLE = \sqrt {\frac{1}{n}\sum_{1}^{m}(log(y'+1) +log(y+1))}
+RMSLE = $\sqrt {\frac{1}{n}\sum_{1}^{m}(log(y'+1) +log(y+1))}$
 
 m  is the total number of observations 
 y' is your prediction
@@ -30,7 +30,7 @@ Some of domain feature such as volumn, lattice angle in radians,atomic density, 
 
 ## Public kernel
 * [Simple Electron Volt predictor](https://www.kaggle.com/sudhirnl7/simple-electron-volt-predictor)
-* [Simple Electron Volt predictor](https://www.kaggle.com/sudhirnl7/simple-ann)
+* [Simple ANN](https://www.kaggle.com/sudhirnl7/simple-ann)
 
 ## Model
 Intial analysis is made using linear regression, later gradient boosting methods are used to build model. The model is evaluated using 5 fold cross validation stragergy.

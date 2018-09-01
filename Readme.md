@@ -1,2 +1,2 @@
-# Kaggle datate's notebook
+# Kaggle
 [Profile link](https://www.kaggle.com/sudhirnl7)

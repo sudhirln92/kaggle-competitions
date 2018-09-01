@@ -14,7 +14,7 @@ One hot encoding is performed on categorical variable. The extreme observations 
 The hyperparameter for machine learning algorithom is tuned using grid search method. The data set is split using Stratified Kfold. In each split model is created and predicted using that model. The final predicted value is average of all model. Logistic regression, Xgboost, Lightgbm algorithms are used. 
 
 ## Model validation
-The model is evaluated on Gini coefficient, a popular measure in insurance industry which quantifies how well-ranked predicted probabilitie are relative to actual class labels. We are familiar with ROC AUC metric, it turns out simple relationship of gini is 2 * AUC -1 with ROC AUC  . The model is 5 times cross validated using Straigfied Kfold validation strategy, the average of predicted target variable is submitted. For logistic regression confusion matrix, ROC plot is used to evaluate model performance.
+The model is evaluated on Gini coefficient, a popular measure in insurance industry which quantifies how well-ranked predicted probabilitie are relative to actual class labels. We are familiar with ROC AUC metric, it turns out simple relationship of gini is $2 * AUC -1$ with ROC AUC  . The model is 5 times cross validated using Straigfied Kfold validation strategy, the average of predicted target variable is submitted. For logistic regression confusion matrix, ROC plot is used to evaluate model performance.
 
 ## Public Kernel
 * [Logistic Regression](https://www.kaggle.com/sudhirnl7/simple-logistic-model-porto)

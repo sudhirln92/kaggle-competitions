@@ -15,7 +15,7 @@ item_description - the full description of the item
 ## Evaluvation metrics
 The root mean square log error (RMSLE) is used as evaluvation metric to analyze performance of model. 
 
-RMSLE = \sqrt {\frac{1}{n}\sum_{1}^{m}(log(y'+1) +log(y+1))}
+RMSLE = $\sqrt {\frac{1}{n}\sum_{1}^{m}(log(y'+1) +log(y+1))}$
 
 m  is the total number of observations 
 y' is your prediction

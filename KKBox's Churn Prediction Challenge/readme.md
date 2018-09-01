@@ -14,7 +14,7 @@ Submissions are now evaluated on the mean column-wise ROC AUC. In other words, t
 ## Evaluvation metrics
 The root mean square log error (RMSLE) is used as evaluvation metric to analyze performance of model. 
 
-RMSLE = \sqrt {\frac{1}{n}\sum_{1}^{m}(log(y'+1) +log(y+1))}
+RMSLE = $\sqrt {\frac{1}{n}\sum_{1}^{m}(log(y'+1) +log(y+1))}$
 
 m  is the total number of observations 
 y' is your prediction
@@ -29,7 +29,7 @@ Some descriptive statistic features and one hot encoding on categorical variable
 Intial analysis is made using logistic regression, later gradient boosting methods are used to build model. The model is evaluated using 5 fold cross validation stragergy. 
 
 ## Public Kernel
-[Simple logistic regression - Wisdom](/home/sudhir/Git/Kaggle_competition/Normad 2018 Transperant condoctor/readme.md)
+[Simple logistic regression - Wisdom](https://www.kaggle.com/sudhirnl7/simple-logistic-regression-wisdom)
 
 
 ## Out come of project
