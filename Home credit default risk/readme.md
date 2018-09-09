@@ -6,48 +6,32 @@ Many people struggle to get loans due to insufficient or non-existent credit his
 Home Credit strives to broaden financial inclusion for the unbanked population by providing a positive and safe borrowing experience. In order to make sure this underserved population has a positive loan experience, Home Credit makes use of a variety of alternative data--including telco and transactional information--to predict their clients' repayment abilities.
 
 ## Data set
-application_{train|test}.csv
+There are 7 different sources of data:
 
-This is the main table, broken into two files for Train (with TARGET) and Test (without TARGET).
-Static data for all applications. One row represents one loan in our data sample.
-bureau.csv
+application_train/application_test: the main training and testing data with information about each loan application at Home Credit. Every loan has its own row and is identified by the feature SK_ID_CURR. The training application data comes with the TARGET indicating 0: the loan was repaid or 1: the loan was not repaid.
 
-All client's previous credits provided by other financial institutions that were reported to Credit Bureau (for clients who have a loan in our sample).
-For every loan in our sample, there are as many rows as number of credits the client had in Credit Bureau before the application date.
-bureau_balance.csv
+bureau: data concerning client's previous credits from other financial institutions. Each previous credit has its own row in bureau, but one loan in the application data can have multiple previous credits.
 
-Monthly balances of previous credits in Credit Bureau.
-This table has one row for each month of history of every previous credit reported to Credit Bureau – i.e the table has (#loans in sample * # of relative previous credits * # of months where we have some history observable for the previous credits) rows.
-POS_CASH_balance.csv
+bureau_balance: monthly data about the previous credits in bureau. Each row is one month of a previous credit, and a single previous credit can have multiple rows, one for each month of the credit length.
 
-Monthly balance snapshots of previous POS (point of sales) and cash loans that the applicant had with Home Credit.
-This table has one row for each month of history of every previous credit in Home Credit (consumer credit and cash loans) related to loans in our sample – i.e. the table has (#loans in sample * # of relative previous credits * # of months in which we have some history observable for the previous credits) rows.
-credit_card_balance.csv
+previous_application: previous applications for loans at Home Credit of clients who have loans in the application data. Each current loan in the application data can have multiple previous loans. Each previous application has one row and is identified by the feature SK_ID_PREV.
 
-Monthly balance snapshots of previous credit cards that the applicant has with Home Credit.
-This table has one row for each month of history of every previous credit in Home Credit (consumer credit and cash loans) related to loans in our sample – i.e. the table has (#loans in sample * # of relative previous credit cards * # of months where we have some history observable for the previous credit card) rows.
-previous_application.csv
+POS_CASH_BALANCE: monthly data about previous point of sale or cash loans clients have had with Home Credit. Each row is one month of a previous point of sale or cash loan, and a single previous loan can have many rows.
+credit_card_balance: monthly data about previous credit cards clients have had with Home Credit. Each row is one month of a credit card balance, and a single credit card can have many rows.
 
-All previous applications for Home Credit loans of clients who have loans in our sample.
-There is one row for each previous application related to loans in our data sample.
-installments_payments.csv
-
-Repayment history for the previously disbursed credits in Home Credit related to the loans in our sample.
-There is a) one row for every payment that was made plus b) one row each for missed payment.
-One row is equivalent to one payment of one installment OR one installment corresponding to one payment of one previous Home Credit credit related to loans in our sample.
-HomeCredit_columns_description.csv
-
-This file contains descriptions for the columns in the various data files.
-
+installments_payment: payment history for previous loans at Home Credit. There is one row for every made payment and one row for every missed payment.
 
 ## Evaluvation metrics
+The target is what we are asked to predict: either a 0 for the loan was repaid on time, or a 1 indicating the client had payment difficulties.
 Submissions are evaluated on area under the ROC curve between the predicted probability and the observed target.
 
 ## Feature engineering
-The descriptive statistic features, binary encoding and one hot encoding on categorical variables are added.
+Exploratory Data Analysis (EDA) is an open-ended process where we calculate statistics and make figures to find trends, anomalies, patterns, or relationships within the data. The goal of EDA is to learn what our data can tell us. It generally starts out with a high level overview, then narrows in to specific areas as we find intriguing areas of the data. The findings may be interesting in their own right, or they can be used to inform our modeling choices, such as by helping us decide which features to use.
+
+The descriptive statistic features, binary encoding and one hot encoding on categorical variables are added. The diffirent feature are aggreagated by thier mean, min, max, sum..ect  and add to the train and test dataframe.
 
 ## Model
 Intial analysis is made using linear regression, later gradient boosting methods are used to build model. The model is evaluated using 5 fold cross validation stragergy.
 
 ## Out come of project
-This project help to analysze property of atoms using exploratory data analysis.
+This project help to analysze credit rating of loan applicant using exploratory data analysis.
