@@ -141,6 +141,7 @@ cython_debug/
 *.Rhistory
 .vscode/
 .ipynb_checkpoints
+*checkpoint.ipynb
 
 
 
