@@ -1,6 +1,8 @@
 # Mercari Price Suggestion Challenge
 Can you automatically suggest product prices to online sellers?
-[Compitation link](https://www.kaggle.com/c/mercari-price-suggestion-challenge)
+| Project Name | Type  | Public Kernel | Metric |
+| ------ | ------ | ------ | ------ | 
+| [Mercari Price Suggestion Challenge](https://www.kaggle.com/c/mercari-price-suggestion-challenge) | Regression | NA | RMSLE |
 
 It can be hard to know how much something’s really worth. Small details can mean big differences in pricing.Product pricing gets even harder at scale, considering just how many products are sold online. Clothing has strong seasonal pricing trends and is heavily influenced by brand names, while electronics have fluctuating prices based on product specs.
 In this competition, we need to build an algorithm that automatically suggests the right product prices. We’ll be provided user-inputted text descriptions of their products, including details like product category name, brand name, and item condition.

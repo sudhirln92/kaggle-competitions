@@ -1,5 +1,9 @@
 # Porto Seguro Safe Driver Prediction
-[Porto Sergo](https://www.kaggle.com/c/porto-seguro-safe-driver-prediction) Is Largest Auto And Homeowner Insurance Company. The aim of the project is to predict probability that a driver will intiate an auto insurance claim next year. A more accurate prediction will allow them to further tailor their prices, and hopefully make auto insurance coverage more accessible to more driver. 
+Porto Sergo Is Largest Auto And Homeowner Insurance Company. The aim of the project is to predict probability that a driver will intiate an auto insurance claim next year. A more accurate prediction will allow them to further tailor their prices, and hopefully make auto insurance coverage more accessible to more driver. 
+
+| Project Name | Type  | Public Kernel | Metric |
+| ------ | ------ | ------ | ------ | 
+|[Porto Seguro Safe Driver Prediction](https://www.kaggle.com/c/porto-seguro-safe-driver-prediction)| Classification | [1. Simple Logistic Regression-PORTO](https://www.kaggle.com/sudhirnl7/simple-logistic-model-porto), [2. XGBoost with StratifiedKFlod LB(0.282)](https://www.kaggle.com/sudhirnl7/xgboost-with-stratifiedkflod-lb-0-282) | Gini Coefficient |
 
 ## Data set Description
 Porto Seguro provided close to 600k and 900k observation of train and test dataset respectively. They were 57 feature anonymized in order to protect company trade secrets, but they were given bit informaation about.  The train and test data set contains feature with similar grouping are tagged with (e.g., ind, reg, car, cat, calc, bin). Values of  -1 indicate that the feature was missing from the observation. The target column in data set is whether or not claim was filed for that policy holder. The target variable is quite unbalanced, with only  %4 of  policyholders in training data filing claim within the year.
@@ -16,13 +20,10 @@ The hyperparameter for machine learning algorithom is tuned using grid search me
 ## Model validation
 The model is evaluated on Gini coefficient, a popular measure in insurance industry which quantifies how well-ranked predicted probabilitie are relative to actual class labels. We are familiar with ROC AUC metric, it turns out simple relationship of gini is $2 * AUC -1$ with ROC AUC  . The model is 5 times cross validated using Straigfied Kfold validation strategy, the average of predicted target variable is submitted. For logistic regression confusion matrix, ROC plot is used to evaluate model performance.
 
-## Public Kernel
-* [Logistic Regression](https://www.kaggle.com/sudhirnl7/simple-logistic-model-porto)
-* [XgBoost](https://www.kaggle.com/sudhirnl7/xgboost-with-stratifiedkflod-lb-0-282)
 
 ## Parameter 
  **XgBoost**
-```
+```python
 params = {
         'objective':'binary:logistic',        
         'max_depth':max_depth,
@@ -41,7 +42,7 @@ params = {
 ```
 
  **LightGBM**
-```
+```python
 param = {
             'objective':'binary',
             'boosting':'gbdt',
@@ -63,7 +64,7 @@ param = {
 ```
 
  **Logistic Regression**
-```
+```python
 class_weight='balanced',C=0.003 
 ```
 

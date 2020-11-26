@@ -1,6 +1,11 @@
 # Toxic Comment Classification Challenge
 Identify and classify toxic online comments
-[Toxic comment](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) In this competition, you’re challenged to build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate
+
+| Project Name | Type  | Public Kernel | Metric |
+| ------ | ------ | ------ | ------ | 
+|[Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge)| NLP, Classification | [1. Logistic Regression TFIDF ](https://www.kaggle.com/sudhirnl7/logistic-regression-tfidf), [2. Logistic regression with hashing vectorizer](https://www.kaggle.com/sudhirnl7/logistic-regression-with-hashing-vectorizer) | AUC |
+
+In this competition, you’re challenged to build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate
 
 ## Data set Description
 We are provided with a large number of Wikipedia comments which have been labeled by human raters for toxic behavior. The types of toxicity are:
@@ -21,11 +26,6 @@ Logistic regression is used to build model
 
 ## Model validation
 Submissions are now evaluated on the mean column-wise ROC AUC. In other words, the score is the average of the individual AUCs of each predicted column.
-
-
-## Public Kernel
-* [Logistic Regression TFIDF](/home/sudhir/Git/Kaggle_competition/Porto Seguro’s Safe Driver Prediction/Readme.md)
-* [Logistic regression with hashing vectorizer](https://www.kaggle.com/sudhirnl7/logistic-regression-with-hashing-vectorizer)
 
 ## Out come of project:
 This project give good opportunity to explore data set. Create new feature from data  set.
