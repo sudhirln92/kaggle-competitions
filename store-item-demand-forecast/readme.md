@@ -1,9 +1,9 @@
 # Store Item Demand Forecasting Challenge
 Predict 3 months of item sales at different stores.
 
-| Project Name | Type  | Public Kernel | Metric |
-| ------ | ------ | ------ | ------ | 
-|[Store Item Demand Forecasting Challenge](https://www.kaggle.com/c/demand-forecasting-kernels-only)| Time Series | [Store Item Demand Forecast-EDA-GBM Model](https://www.kaggle.com/sudhirnl7/tore-item-demand-forecast-eda-gbm-model) | SMAPE |
+| Project Name | Type  | Public Kernel | Metric | Date |
+| ------ | ------ | ------ | ------ | ------ | 
+|[Store Item Demand Forecasting Challenge](https://www.kaggle.com/c/demand-forecasting-kernels-only)| Time Series | [Store Item Demand Forecast-EDA-GBM Model](https://www.kaggle.com/sudhirnl7/tore-item-demand-forecast-eda-gbm-model) | SMAPE | Jun-2018 |
 
 
 You are given 5 years of store-item sales data, and asked to predict 3 months of sales for 50 different items at 10 different stores.
@@ -36,4 +36,4 @@ Lightgbm algorithms are used.
 The model is 5 times cross validated using Kfold validation strategy, the average of predicted target variable is submitted. 
 
 ## Out come of project:
-This project give good opportunity to explore data set. Create new feature from data  set.
+This project gives a good opportunity to explore data set. Create new feature from data  set.

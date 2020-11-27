@@ -3,6 +3,9 @@ Can you predict realty price fluctuations in Russia’s volatile economy?
 Housing costs demand a significant investment from both consumers and developers. And when it comes to planning a budget—whether personal or corporate—the last thing anyone needs is uncertainty about one of their biggets expenses. Sberbank, Russia’s oldest and largest bank, helps their customers by making predictions about realty prices so renters, developers, and lenders are more confident when they sign a lease or purchase a building.
 
 The aim of this competition is to predict the sale price of each property.
+| Project Name | Type  | Public Kernel | Metric | Date |
+| ------ | ------ | ------ | ------ | ------ | 
+|[ Sberbank Russian Housing Market ](https://www.kaggle.com/c/sberbank-russian-housing-market)| Regression | [Simple Naive Bayes & XGBoost](https://www.kaggle.com/sudhirnl7/simple-naive-bayes-xgboost) | RMSLE | Jun-2017 |
 
 # Data set Description
 The training data is from August 2011 to June 2015, and the test set is from July 2015 to May 2016. The dataset also includes information about overall conditions in Russia's economy and finance sector. Train dataset consist of 30.5K * 292 observaation and test dataset consist of 7662*291 observation.

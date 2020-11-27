@@ -1,9 +1,9 @@
 # House Prices: Advanced Regression Techniques
 Predict sales prices and practice feature engineering, RFs, and gradient boosting
 
-| Project Name | Type  | Public Kernel | Metric |
-| ------ | ------ | ------ | ------ | 
-|[House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)| Regression |[House price analysis, Ridge Regression](https://www.kaggle.com/sudhirnl7/house-price-analysis-ridge-regression)| RMSE |
+| Project Name | Type  | Public Kernel | Metric | Date |
+| ------ | ------ | ------ | ------ | ------ | 
+|[House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)| Regression |[House price analysis, Ridge Regression](https://www.kaggle.com/sudhirnl7/house-price-analysis-ridge-regression)| RMSE | Ongoing |
 
 It is your job to predict the sales price for each house. For each Id in the test set, you must predict the value of the SalePrice variable. 
 
