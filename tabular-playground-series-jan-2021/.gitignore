@@ -1,0 +1,6 @@
+
+# custom
+.ipynb_checkpoints*
+input/*.csv
+model_preds/*.csv
+models/*.pkl

@@ -8,6 +8,7 @@ Various kaggle competitions participation results and summary of the project.
 List of competitions
 | Project Name | Type  | Public Kernel | Metric | Date |
 | ------ | ------ | ------ |  ------ | ------ |
+| [Tabular Playground Series - Jan 2021](https://www.kaggle.com/c/tabular-playground-series-jan-2021) | Regression | NA | RMSE | Jan 2021 |
 | [COVID19 Global Forecasting (Week 5)](https://www.kaggle.com/c/covid19-global-forecasting-week-5) | Time Series | [Quantile Regressions](https://www.kaggle.com/sudhirnl7/quantile-regression) | Weighted Pinball Loss | May-2020 |
 | [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk) | Classification | [Exploratory Data Analysis-GBM Model](https://www.kaggle.com/sudhirnl7/exploratory-data-analysis-gbm-model) | AUC | May-2018 |
 | [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques) | Regression | [House price analysis, Ridge Regression](https://www.kaggle.com/sudhirnl7/house-price-analysis-ridge-regression) | RMSE | Ongoing |
