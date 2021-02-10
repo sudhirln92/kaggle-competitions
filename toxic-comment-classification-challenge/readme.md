@@ -1,7 +1,7 @@
 # Toxic Comment Classification Challenge
 Identify and classify toxic online comments
 
-| Project Name | Type  | Public Kernel | Metric | Date |
+| Name | Type  | Public Kernel | Metric | Date |
 | ------ | ------ | ------ | ------ | ------ | 
 |[Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge)| NLP, Classification | [1. Logistic Regression TFIDF ](https://www.kaggle.com/sudhirnl7/logistic-regression-tfidf), [2. Logistic regression with hashing vectorizer](https://www.kaggle.com/sudhirnl7/logistic-regression-with-hashing-vectorizer) | AUC | Dec-2017|
 

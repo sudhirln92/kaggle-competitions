@@ -1,7 +1,7 @@
 # Nomad2018 Predicting Transparent Conductors
 Predict the key properties of novel transparent semiconductors
 
-| Project Name | Type  | Public Kernel | Metric | Date |
+| Name | Type  | Public Kernel | Metric | Date |
 | ------ | ------ | ------ | ------ | ------ | 
 |[Nomad2018 Predicting Transparent Conductors](https://www.kaggle.com/c/nomad2018-predict-transparent-conductors)| Regression | [1. Simple Electron Volt predictor](https://www.kaggle.com/sudhirnl7/simple-electron-volt-predictor), [2. Simple ANN](https://www.kaggle.com/sudhirnl7/simple-ann) | RMSLE |Dec-2017 |
 

@@ -1,7 +1,7 @@
 # New York City Taxi Trip Duration
 Share code and data to improve ride time predictions.In this competition, Kaggle is challenging you to build a model that predicts the total ride duration of taxi trips in New York City.
 
-| Project Name | Type  | Public Kernel | Metric | Date |
+| Name | Type  | Public Kernel | Metric | Date |
 | ------ | ------ | ------ | ------ | ------ |
 |[New York City Taxi Trip Duration](https://www.kaggle.com/c/nyc-taxi-trip-duration)| Regression | NA | RMSLE | Jul 2017 |
 

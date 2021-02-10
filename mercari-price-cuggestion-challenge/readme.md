@@ -1,6 +1,6 @@
 # Mercari Price Suggestion Challenge
 Can you automatically suggest product prices to online sellers?
-| Project Name | Type  | Public Kernel | Metric | Date |
+| Name | Type  | Public Kernel | Metric | Date |
 | ------ | ------ | ------ | ------ | ------ | 
 | [Mercari Price Suggestion Challenge](https://www.kaggle.com/c/mercari-price-suggestion-challenge) | Regression | NA | RMSLE | Nov 2017 |
 

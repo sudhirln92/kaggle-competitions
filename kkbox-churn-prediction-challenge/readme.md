@@ -1,7 +1,7 @@
 # WSDM - KKBox's Churn Prediction Challenge
 Predict the key properties of novel transparent semiconductors
 
-| Project Name | Type  | Public Kernel | Metric |  Date |
+| Name | Type  | Public Kernel | Metric |  Date |
 | ------ | ------ | ------ | ------ | ------ |
 |[WSDM - KKBox's Churn Prediction Challenge](https://www.kaggle.com/c/kkbox-churn-prediction-challenge)| Classification |[Simple logistic regression - Wisdom](https://www.kaggle.com/sudhirnl7/simple-logistic-regression-wisdom)| log loss | Sep 2017 |
 

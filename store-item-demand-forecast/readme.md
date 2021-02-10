@@ -1,7 +1,7 @@
 # Store Item Demand Forecasting Challenge
 Predict 3 months of item sales at different stores.
 
-| Project Name | Type  | Public Kernel | Metric | Date |
+| Name | Type  | Public Kernel | Metric | Date |
 | ------ | ------ | ------ | ------ | ------ | 
 |[Store Item Demand Forecasting Challenge](https://www.kaggle.com/c/demand-forecasting-kernels-only)| Time Series | [Store Item Demand Forecast-EDA-GBM Model](https://www.kaggle.com/sudhirnl7/tore-item-demand-forecast-eda-gbm-model) | SMAPE | Jun-2018 |
 

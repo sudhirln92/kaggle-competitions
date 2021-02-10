@@ -1,7 +1,7 @@
 # Home Credit Default Risk
 Can you predict how capable each applicant is of repaying a loan?
 
-| Project Name | Type  | Public Kernel |Metric | Date |
+| Name | Type  | Public Kernel |Metric | Date |
 | ------ | ------ | ------ | ------ | ------ | 
 | [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk) | Classification | [Exploratory Data Analysis-GBM Model](https://www.kaggle.com/sudhirnl7/exploratory-data-analysis-gbm-model) | AUC | May 2018 |
 

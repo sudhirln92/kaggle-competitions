@@ -6,7 +6,7 @@ Various kaggle competitions participation results and summary of the project.
 
 
 List of competitions
-| Project Name | Type  | Public Kernel | Metric | Date |
+| Name | Type  | Public Kernel | Metric | Date |
 | ------ | ------ | ------ |  ------ | ------ |
 | [Tabular Playground Series - Jan 2021](https://www.kaggle.com/c/tabular-playground-series-jan-2021) | Regression | NA | RMSE | Jan 2021 |
 | [COVID19 Global Forecasting (Week 5)](https://www.kaggle.com/c/covid19-global-forecasting-week-5) | Time Series | [Quantile Regressions](https://www.kaggle.com/sudhirnl7/quantile-regression) | Weighted Pinball Loss | May-2020 |
