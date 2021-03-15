@@ -75,25 +75,19 @@ def optimize(params, X, y):
     # Choice model
     global MODEL
     if MODEL == "lin_reg":
-        model = linear_model.LinearRegression(
-            **params, multi_class="multinomial", random_state=seed
-        )
+        model = linear_model.LinearRegression(**params, random_state=seed)
     elif MODEL == "sgd":
         model = linear_model.SGDRegressor(**params, random_state=seed)
     elif MODEL == "rftree":
         model = ensemble.RandomForestRegressor(**params, n_jobs=-1, random_state=seed)
-    elif MODEL == "extree":
-        model = ensemble.ExtraTreesRegressor(**params, n_jobs=-1, random_state=seed)
-    elif MODEL == "gbm":
-        model = ensemble.GradientBoostingRegressor(**params, random_state=seed)
-    elif MODEL == "knn":
-        model = neighbors.KNeighborsRegression(**params, n_jobs=-1)
     elif MODEL == "lgbm":
         model = lgb.LGBMRegressor(
             **params,
             objective="regression",
             boosting_type="gbdt",
             random_state=seed,
+            n_estimators=3000,
+            learning_rate=0.02,
             n_jobs=-1,
         )
     elif MODEL == "xgbm":
@@ -102,6 +96,8 @@ def optimize(params, X, y):
             objective="regression",
             boosting_type="gbdt",
             random_state=seed,
+            n_estimators=3000,
+            learning_rate=0.02,
             nthread=-1,
         )
 
@@ -173,45 +169,30 @@ def BayesSearch(X, y):
             "min_samples_split": scope.int(hp.quniform("min_samples_split", 3, 100, 1)),
             #'bootstrap': hp.choice('bootstrap', [True, False]),
         }
-    elif MODEL == "gbm":
-        param_space = {
-            "learning_rate": scope.float(hp.uniform("learning_rate", 0.001, 1)),
-            "n_estimators": scope.int(hp.quniform("n_estimators", 100, 2000, 1)),
-            "subsample": scope.float(hp.uniform("subsample", 0.001, 1)),
-            "criterion": hp.choice("criterion", ["friedman_mse", "mse", "mae"]),
-            "max_features": hp.choice("max_features", ["auto", "log2"]),
-            "min_samples_leaf": scope.int(hp.quniform("min_samples_leaf", 3, 100, 1)),
-            "min_samples_split": scope.int(hp.quniform("min_samples_split", 3, 100, 1)),
-            # 'loss':hp.choice('bootstrap',['deviance', 'exponential']),
-        }
-    elif MODEL == "knn":
-        param_space = {
-            "n_neighbors": scope.int(hp.quniform("n_neighbors", 5, 100, 1)),
-            "leaf_size": scope.int(hp.quniform("leaf_size", 30, 200, 1)),
-        }
     elif MODEL == "lgbm":
         param_space = {
-            "learning_rate": scope.float(hp.uniform("learning_rate", 0.0001, 0.1)),
-            "n_estimators": scope.int(hp.quniform("n_estimators", 25, 1000, 1)),
-            "max_depth": scope.int(hp.quniform("max_depth", 6, 15, 1)),
-            "subsample": scope.float(hp.uniform("subsample", 0.6, 1)),
-            "colsample_bytree": scope.float(hp.uniform("colsample_bytree", 0.6, 1)),
-            # "subsample_freq":scope.int(hp.quniform("subsample_freq", 0, 5, 1)),
-            "min_child_samples": scope.int(
-                hp.quniform("min_child_samples", 20, 100, 1)
+            "num_leaves": scope.int(hp.uniform("num_leaves", 10, 1000)),
+            "max_depth": scope.int(hp.uniform("max_depth", 6, 100)),
+            "cat_smooth": scope.int(hp.uniform("cat_smooth", 1, 100)),
+            "subsample": scope.float(hp.uniform("subsample", 0.4, 1)),
+            "colsample_bytree": scope.float(hp.uniform("colsample_bytree", 0.4, 1)),
+            # "subsample_freq":scope.int(hp.uniform("subsample_freq", 1, 20)),
+            "min_child_samples": scope.int(hp.uniform("min_child_samples", 2, 100)),
+            "min_split_gain": scope.float(
+                hp.loguniform("min_split_gain", np.log(0.001), np.log(10))
             ),
-            "min_split_gain": scope.float(hp.uniform("min_split_gain", 0.01, 1)),
-            "reg_alpha": scope.float(hp.uniform("reg_alpha", 0.0001, 1)),
-            "reg_lambda": scope.float(hp.uniform("reg_lambda", 0.0001, 1)),
-            "num_leaves": scope.int(hp.quniform("num_leaves", 32, 10000, 100)),
+            "reg_alpha": scope.float(
+                hp.loguniform("reg_alpha", np.log(0.001), np.log(10))
+            ),
+            "reg_lambda": scope.float(
+                hp.loguniform("reg_lambda", np.log(0.001), np.log(10))
+            ),
         }
     elif MODEL == "xgbm":
         param_space = {
-            "learning_rate": scope.float(hp.uniform("learning_rate", 0.0001, 0.1)),
-            "n_estimators": scope.int(hp.quniform("n_estimators", 100, 1000, 1)),
             "max_depth": scope.int(hp.quniform("max_depth", 6, 10, 1)),
-            "subsample": scope.float(hp.uniform("subsample", 0.7, 1)),
-            "colsample_bytree": scope.float(hp.uniform("colsample_bytree", 0.7, 1)),
+            "subsample": scope.float(hp.uniform("subsample", 0.4, 1)),
+            "colsample_bytree": scope.float(hp.uniform("colsample_bytree", 0.4, 1)),
             "gamma": scope.int(hp.quniform("gamma", 0, 20, 1)),
             "reg_alpha": scope.float(hp.uniform("reg_alpha", 0.01, 1)),
             "reg_lambda": scope.float(hp.uniform("reg_lambda", 0.01, 1)),

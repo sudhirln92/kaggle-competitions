@@ -83,12 +83,6 @@ class CreateFolds:
         print("Final shape of file:", df.shape)
         df.to_csv(f"input/{save_file}.csv", index=False)
 
-    def read_train_test(self, nrows):
-        """nrows : None read all rows"""
-        train = pd.read_csv(f"input/{self.TRAIN_DATA}", nrows=nrows)
-        test = pd.read_csv(f"input/{self.TEST_DATA}", nrows=nrows)
-        return train, test
-
     def get_feature_df(self, train):
         # split data
         X = train.drop(self.drop_cols, axis=1)
@@ -121,25 +115,59 @@ class CreateFolds:
         X.to_csv(f"input/{save_file}.csv", index=False)
         print("Number of rows and columns in test data", X.shape)
 
+    def read_train_test(self, nrows):
+        """nrows : None read all rows"""
+        train = pd.read_csv(f"input/{self.TRAIN_DATA}", nrows=nrows)
+        test = pd.read_csv(f"input/{self.TEST_DATA}", nrows=nrows)
+        return train, test
+
+    def combine_train_test(self, train, test):
+        """combine train test dataset"""
+        train["data"] = "train"
+
+        test[self.target_col] = np.nan
+        test["data"] = "test"
+
+        df = pd.concat([train, test], axis=0).reset_index(drop=True)
+
+        return df
+
+    def split_train_test(self, df):
+
+        train = df.query("data == 'train' ").drop("data", axis=1).reset_index(drop=True)
+
+        test = (
+            df.query("data == 'test' ")
+            .drop(["data", self.target_col], axis=1)
+            .reset_index(drop=True)
+        )
+
+        return train, test
+
     def apply_methods(self):
-        nrows = None  # 20000
+        nrows = None  # None / 2000
         # read dataset
         train, test = self.read_train_test(nrows)
 
-        # # fit trasform feature pipeline
-        df_feat = self.get_feature_df(train)
+        # combine_train_test
+        df = self.combine_train_test(train, test)
+
+        #  fit trasform feature pipeline
+        df_feat = self.get_feature_df(df)
+
+        # split_train_test
+        train_feat, test_feat = self.split_train_test(df_feat)
 
         # create_folds
-        self.create_folds(source_file=df_feat, save_file="train_folds")
+        self.create_folds(source_file=train_feat, save_file="train_folds")
 
         # transform test data
-        test = pd.read_csv(f"input/{self.TEST_DATA}", nrows=nrows)
-        self.tranform_test_data(test, save_file="test_folds", pipeline="pipeline")
+        # self.tranform_test_data(test, save_file="test_folds", pipeline="pipeline")
+        test_feat.to_csv(f"input/test_folds.csv", index=False)
+        print("Number of rows and columns in test data", test_feat.shape)
 
 
 if __name__ == "__main__":
     # create folds, apply transform on test data
-    TRAIN_BR_DATA = "train_bureau.csv"
-    TEST_BR_DATA = "test_bureau.csv"
 
     CreateFolds(**config).apply_methods()

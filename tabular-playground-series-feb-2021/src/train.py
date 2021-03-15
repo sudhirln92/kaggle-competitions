@@ -26,9 +26,12 @@ TARGET_COL = os.environ.get("TARGET_COL")
 STAGE = int(os.environ.get("STAGE"))
 SAVE_VALID = bool(os.environ.get("SAVE_VALID"))
 
-# from driver_response.model.supervised import CustomModel
-kfold = 5
-seed = 42
+from .utils.file_handler import read_config
+
+config = read_config("config.json")
+
+kfold = config["kfold"]
+seed = config["seed"]
 # =============================================================================
 # train
 # =============================================================================

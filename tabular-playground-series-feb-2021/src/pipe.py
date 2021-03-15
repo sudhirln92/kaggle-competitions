@@ -35,33 +35,6 @@ class CustomPipeline:
         """
         self.pickle_pipe = pickle_pipe
 
-        # extract_param
-        self.extract_param = [
-            "cont0",
-            "cont1",
-            "cont2",
-            "cont3",
-            "cont4",
-            "cont5",
-            "cont6",
-            "cont7",
-            "cont8",
-            "cont9",
-            "cont10",
-            "cont11",
-            "cont12",
-            "cont13",
-            "cat0",
-            "cat1",
-            "cat2",
-            "cat3",
-            "cat4",
-            "cat5",
-            "cat6",
-            "cat7",
-            "cat8",
-            "cat9",
-        ]
         num_cols = [
             "cont0",
             "cont1",
@@ -109,20 +82,6 @@ class CustomPipeline:
             "max_depth": 10,
         }
 
-        self.kmeans_param = {
-            "cluster_prefix": "cluster",
-            "seed": seed,
-            "n_clusters": 25,
-            "columns": ["PickUpLon", "PickUpLat"],
-        }
-
-        self.pca_param = {
-            "n_components": 4,
-            "cols": self.extract_param,
-            "col_prefix": "pca",
-            "seed": seed,
-        }
-
         # self.gmm_param
         self.gmm_param = {
             "cols_component": {
@@ -141,7 +100,7 @@ class CustomPipeline:
                 "cont13": 6,
             },
             "col_suffix": "_gmm",
-            "predict_proba": True,
+            "predict_proba": False,
         }
         # quantile transform
         self.quant_param = {
@@ -169,8 +128,6 @@ class CustomPipeline:
         """
         # Feature Engineering Pipeline
         # Step: ExtractColumn
-        # Step: Data Preprocessing
-        # Step: HandleOutlier
         # Step: QuantileTransformer
         # Step: Multi GaussianEncoder
         """
@@ -178,13 +135,9 @@ class CustomPipeline:
         print("-" * 20, "Feature Engineering Pipeline")
         pipe = Pipeline(
             [
-                ("ExtractColumn", custom.ExtractColumn(self.extract_param)),
+                # ("ExtractColumn", custom.ExtractColumn(self.extract_param)),
                 # ("HandleOutlier", preprocess.HandleOutlier(**self.outlier_param)),
-                # ("Impute", custom_impute.MissForestImputer(**self.impute_param)),
-                # ("KMeans p", unsupervised.CustomKMeans(**self.kmeans_pickup_param)),
-                # ("Gaussian", encoder.MultiGaussianEncoder(**self.gaussian_param)),
-                # ("PCA", unsupervised.CustomPCA(**self.pca_param)),
-                # ("gmm_feat", feature.CustomGMM(**self.gmm_param)),
+                ("gmm_feat", feature.CustomGMM(**self.gmm_param)),
                 ("DummyVariable", feat_engineer.DummyTransformer(self.dummy_param)),
                 ("Quan", preprocess.CustomQuantileTransformer(**self.quant_param)),
                 ("Drop Columns1", custom.DropColumn(self.drop_columns)),

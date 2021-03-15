@@ -13,19 +13,26 @@ MODELS = {
     "lgbm": lgb.LGBMRegressor(
         objective="regression",
         boosting_type="gbdt",
-        random_state=seed,
         n_jobs=-1,
-        learning_rate=0.03811393134007876,
-        colsample_bytree=0.6862274468156859,
-        subsample=0.7465222086484357,
-        min_split_gain=0.6774057734887523,
-        min_child_samples=27,
-        n_estimators=987,
-        max_depth=6,
-        num_leaves=7200,
-        reg_alpha=0.7705188695124446,
-        reg_lambda=0.947952335265982,
-    ),
+        n_estimators=3000,
+        learning_rate=0.02,
+        random_state=seed,
+        **{
+            "cat_smooth": 7.530798694305587,
+            "colsample_bytree": 0.5947095495005181,
+            "max_depth": 72,
+            "min_child_samples": 70,
+            "min_split_gain": 0.0011369738838037113,
+            "num_leaves": 122,
+            "reg_alpha": 2.3886192425757202,
+            "reg_lambda": 0.008028993252510504,
+            "subsample": 0.7837832722604414,
+        }
+    )
+}
+
+
+MODELS1 = {
     "xgbm": xgb.XGBRegressor(
         objective="reg:linear",
         random_state=seed,
@@ -36,10 +43,6 @@ MODELS = {
         n_estimators=987,
         max_depth=6,
     ),
-}
-
-
-MODELS1 = {
     "lgbm": lgb.LGBMRegressor(
         objective="regression",
         boosting_type="gbdt",

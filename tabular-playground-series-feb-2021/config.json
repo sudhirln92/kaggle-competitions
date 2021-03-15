@@ -4,7 +4,7 @@
     "input": "input",
     "models_folder": "models",
     "models_preds": "models_preds",
-    "kfold": 5,
+    "kfold": 10,
     "idx": "id",
     "target_col": "target",
     "drop_cols": [

@@ -25,9 +25,9 @@ TEST_DATA = "input/test_folds.csv"
 # =============================================================================
 
 
-class MultiRegressionPredict:
+class RegressionPredict:
     """
-    Multi Regression Predict
+    Regression Predict
     """
 
     def __init__(self, Id, kfold, drop_cols, feature_pipeline_pkl, **kwargs):
@@ -68,7 +68,6 @@ class MultiRegressionPredict:
 
     def multi_model_prediction(self, df_test, MODELS, target_col, last_stage=False):
         pred = []
-        Id = df_test[self.Id]
         X = df_test.drop(self.drop_cols, axis=1)
 
         # multi model prediction
@@ -83,14 +82,13 @@ class MultiRegressionPredict:
 
     def single_model_prediction(self, df_test, MODELS, last_stage=False):
         # single model
-        Id = df_test[self.Id]
         X = df_test.drop(self.drop_cols, axis=1)
 
         # multi model prediction
         for model_name in MODELS:
             target_col = "target"
             # predict
-            y_pred = self.multi_model_prediction(model_name, target_col, X)
+            y_pred = self.predict_folds_model_avg(model_name, target_col, X)
 
             # print result
             # pred_tmp = self.inverse_transform_y(y_pred, target_col)
@@ -104,11 +102,10 @@ class MultiRegressionPredict:
         df_test = pd.read_csv(TEST_DATA)
 
         # predict_every_model
-        Id = df_test[self.Id]
         pred = self.single_model_prediction(
             df_test, MODELS=dispatcher.MODELS.keys(), last_stage=True
         )
-        pred[self.Id] = Id
+        pred[self.Id] = df_test[self.Id]
 
         # stage 2 prediction
         # df_test = pd.merge(df_test, pred, on=self.Id, how="left")
@@ -148,11 +145,11 @@ if __name__ == "__main__":
     param = {
         "kfold": 5,
         "Id": "id",
-        "drop_cols": ["id"],
+        "drop_cols": "id",
         "feature_pipeline_pkl": "pipeline_X.pkl",
         "test_data": "input/test_folds.csv",
     }
 
     # for start_date,end_date
-    submission = MultiRegressionPredict(**param).final_predict()
+    submission = RegressionPredict(**param).final_predict()
     submission.to_csv("model_preds/submission.csv", index=False)
