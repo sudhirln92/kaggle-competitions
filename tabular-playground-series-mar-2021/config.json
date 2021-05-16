@@ -1,0 +1,19 @@
+{
+    "name": "tabular",
+    "sourcecode": "src",
+    "input": "input",
+    "models_folder": "models",
+    "models_preds": "models_preds",
+    "kfold": 10,
+    "idx": "id",
+    "num_class": 2,
+    "target_col": "target",
+    "drop_cols": [
+        "id",
+        "target"
+    ],
+    "seed": 42,
+    "kfold_type": "stratified",
+    "TRAIN_DATA": "train.csv",
+    "TEST_DATA": "test.csv"
+}
